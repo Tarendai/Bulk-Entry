@@ -73,3 +73,12 @@
 .bulk-entry-card-field .wp-editor-tools {
 	display: none;
 }
+
+.bulk-entry-notification .bulk-entry-card-delete {
+	border: none;
+	float: right;
+	margin-right: 10px;
+	color: black;
+	font-weight: bold;
+	font-size: 120%;
+}

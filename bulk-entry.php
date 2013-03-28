@@ -117,7 +117,7 @@ class BulkEntry {
 		$id = wp_insert_post( $my_post );
 		$permalink = get_permalink( $id );
 		$editlink = get_edit_post_link( $id );
-		$reply .= '<p><a href="#" class="bulk-entry-card-delete" ><b>x</b></a> "'.$title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a></p>';
+		$reply .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> "'.$title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a></p>';
 		$reply .= '</div>';
 		$reply .= $this->end_right_block();
 		$reply .= $this->end_block();
@@ -177,8 +177,10 @@ class BulkEntry {
 		echo '</div>';
 	}
 
-	function start_block() {
-		$block = '<div class="bulk-entry-block">';
+	function start_block( $custom_classes ) {
+		$custom_classes[] = 'bulk-entry-block';
+		$classes = implode( ' ', $custom_classes );
+		$block = '<div class="'.$classes.'">';
 		return $block;
 	}
 
