@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
 				cards.animate({
 					opacity: 1,
 					"margin-top":"0"
-				}, 300, function() {
+				}, 200, function() {
 					//
 				});
 			},
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
 			opacity: 0,
 			left: '+500px',
 			"margin-bottom":"-300px"
-		}, 300, function() {
+		}, 200, function() {
 			formobj.remove();
 		});
 		return false;
@@ -70,7 +70,7 @@ jQuery(document).ready(function() {
 				cards.animate({
 					opacity: 1,
 					"margin-top":"0"
-				}, 300, function() {
+				}, 200, function() {
 					//
 				});
 				formobj.css( 'position', 'relative' ).css('margin-top','300px').animate({
@@ -78,7 +78,7 @@ jQuery(document).ready(function() {
 					left: '+500px',
 					"margin-top": 0,
 					"margin-bottom":"-300px"
-				}, 300, function() {
+				}, 200, function() {
 					formobj.remove();
 				});
 				//tinyMCE_bulk_entry_init( data );
