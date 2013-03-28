@@ -28,7 +28,13 @@ jQuery(document).ready(function() {
 
 	jQuery( document).on( 'click', '.bulk-entry-card-delete', function ( e ) {
 		var formobj = jQuery( this ).closest( '.bulk-entry-block' );
-		formobj.remove();
+		formobj.css( 'position', 'relative' ).animate({
+			opacity: 0,
+			left: '+500px',
+			"margin-bottom":"-300px"
+		}, 300, function() {
+			formobj.remove();
+		});
 		return false;
 	});
 
