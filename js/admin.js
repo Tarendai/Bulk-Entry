@@ -17,8 +17,15 @@ jQuery(document).ready(function() {
 			success: function( data ){
 				data = jQuery.parseJSON( data );
 				var cards = jQuery( data.content );
+				cards.css('opacity','0').css('margin-top','-300px');
 				jQuery( '#bulk-entry-canvas' ).prepend( cards );
 				tinyMCE_bulk_entry_init( data );
+				cards.animate({
+					opacity: 1,
+					"margin-top":"0"
+				}, 300, function() {
+					//
+				});
 			},
 			error: function(){
 				alert("fail :-(");
