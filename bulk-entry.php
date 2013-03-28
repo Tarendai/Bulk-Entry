@@ -96,16 +96,18 @@ class BulkEntry {
 	}
 
 	function wp_ajax_bulk_entry_submit_post() {
-		$reply = $this->start_block();
+		$reply = $this->start_block( array( 'bulk-entry-notification' ) );
 		$reply .= $this->start_left_block();
 		$reply .= "&nbsp;";
 		$reply .= $this->end_left_block();
 		$reply .= $this->start_right_block();
 		$reply .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
+
 		$type = $_POST['bulk_entry_posttype'];
 		$status = $_POST['bulk_entry_poststatus'];
 		$content = $_POST['bulk_entry_postcontent'];
 		$title = $_POST['bulk_entry_posttitle'];
+
 		// Create post object
 		$my_post = array(
 			'post_title'    => $title,
@@ -122,8 +124,6 @@ class BulkEntry {
 		$reply .= $this->end_right_block();
 		$reply .= $this->end_block();
 		echo '{ "content" : '.json_encode( $reply ).' }';
-//		error_log();
-//		error_log( print_r( $_POST, true ) );
 		die();
 	}
 
@@ -145,7 +145,6 @@ class BulkEntry {
 
 		foreach ( $this->mcesettings as $editor_id => $init ) {
 			$ids[] = $editor_id;
-			//$options = self::tinymce_parse_init( $init );
 			$qtInit .= '"'.$editor_id.'":{"id":"'.$editor_id.'","buttons":"strong,em,link,block,del,ins,img,ul,ol,li,code,more,spell,close"},';
 		}
 		$qtInit = '{' . trim( $qtInit, ',' ) . '}';
