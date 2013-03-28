@@ -65,8 +65,22 @@ jQuery(document).ready(function() {
 			success: function( data ){
 				data = jQuery.parseJSON( data );
 				var cards = jQuery( data.content );
+				cards.css('opacity','0').css('margin-top','-300px');
 				jQuery( '#bulk-entry-canvas' ).prepend( cards );
-				formobj.remove();
+				cards.animate({
+					opacity: 1,
+					"margin-top":"0"
+				}, 300, function() {
+					//
+				});
+				formobj.css( 'position', 'relative' ).css('margin-top','300px').animate({
+					opacity: 0,
+					left: '+500px',
+					"margin-top": 0,
+					"margin-bottom":"-300px"
+				}, 300, function() {
+					formobj.remove();
+				});
 				//tinyMCE_bulk_entry_init( data );
 			},
 			error: function(){
