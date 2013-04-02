@@ -17,7 +17,9 @@ jQuery(document).ready(function() {
 			success: function( data ){
 				data = jQuery.parseJSON( data );
 				var cards = jQuery( data.content );
-				cards.css('opacity','0').css('margin-top','-300px');
+				var height = cards.height();
+				height = Math.max(height,30);
+				cards.css('opacity','0').css('margin-top',"-"+height+"px");
 				jQuery( '#bulk-entry-canvas' ).prepend( cards );
 				tinyMCE_bulk_entry_init( data );
 				cards.animate({
@@ -35,10 +37,12 @@ jQuery(document).ready(function() {
 
 	jQuery( document).on( 'click', '.bulk-entry-card-delete', function ( e ) {
 		var formobj = jQuery( this ).closest( '.bulk-entry-block' );
+		var height = formobj.height();
+		height = Math.max(height,30);
 		formobj.css( 'position', 'relative' ).animate({
 			opacity: 0,
 			left: '+500px',
-			"margin-bottom":"-300px"
+			"margin-bottom":"-"+height+"px"
 		}, 200, function() {
 			formobj.remove();
 		});
@@ -65,19 +69,21 @@ jQuery(document).ready(function() {
 			success: function( data ){
 				data = jQuery.parseJSON( data );
 				var cards = jQuery( data.content );
-				cards.css('opacity','0').css('margin-top','-300px');
+				var height = cards.height();
+				height = Math.max( height, 30 );
+				cards.css( 'opacity', '0' ).css( 'margin-top', "-" + height + "px" );
 				jQuery( '#bulk-entry-canvas' ).prepend( cards );
 				cards.animate({
 					opacity: 1,
-					"margin-top":"0"
+					"margin-top": "0"
 				}, 200, function() {
 					//
 				});
-				formobj.css( 'position', 'relative' ).css('margin-top','300px').animate({
+				formobj.css( 'position', 'relative' ).css('margin-top',height+'px').animate({
 					opacity: 0,
 					left: '+500px',
 					"margin-top": 0,
-					"margin-bottom":"-300px"
+					"margin-bottom":"-"+formobj.height()+"px"
 				}, 200, function() {
 					formobj.remove();
 				});
