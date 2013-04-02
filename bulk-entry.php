@@ -112,7 +112,8 @@ class BulkEntry {
 		$my_post = array(
 			'post_title'    => $title,
 			'post_content'  => $content,
-			'post_status'   => $status
+			'post_status'   => $status,
+			'post_type'		=> $type
 		);
 
 		// Insert the post into the database
