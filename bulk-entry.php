@@ -285,6 +285,8 @@ class BulkEntry {
 		$card .= '</div>';
 		$card .= '</div>';
 		$card .= $this->end_right_block();
+		$ajax_nonce = wp_create_nonce( $editor_id );
+		$card .= '<input type="hidden" name="bulk_entry_editor_nonce" value="'.$ajax_nonce.'" />';
 		$card .= '<input type="hidden" name="bulk_entry_editor_id" value="'.$editor_id.'" />';
 		$card .= '<input type="hidden" name="bulk_entry_poststatus" value="'.$poststatus.'" />';
 		$card .= '<input type="hidden" name="bulk_entry_posttype" value="'.$posttype.'" />';
