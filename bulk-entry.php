@@ -184,7 +184,7 @@ class BulkEntry {
 		echo '</div>';
 	}
 
-	function start_block( $custom_classes ) {
+	function start_block( $custom_classes = array() ) {
 		$custom_classes[] = 'bulk-entry-block';
 		$classes = implode( ' ', $custom_classes );
 		$block = '<div class="'.$classes.'">';
