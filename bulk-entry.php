@@ -214,6 +214,23 @@ class BulkEntry {
 		return $block;
 	}
 
+	function message_card( $label, $message ) {
+		$card = $this->start_block( array( 'bulk-entry-message' ) );
+		$card .= '<form method="post" action="">';
+		$card .= $this->start_left_block();
+		$card .= $label;
+		$card .= $this->end_left_block();
+		$card .= $this->start_right_block();
+		$card .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
+		$card .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> ';
+		$card .= $message;
+		$card .= '</p>';
+		$card .= '</div>';
+		$card .= $this->end_right_block();
+		$card .= $this->end_block();
+		return $card;
+	}
+
 	function toolbar() {
 		$toolbar = $this->start_block();
 		$toolbar .= '<form method="post" action="">';
