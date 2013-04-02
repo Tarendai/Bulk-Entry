@@ -96,6 +96,11 @@ class BulkEntry {
 	}
 
 	function wp_ajax_bulk_entry_submit_post() {
+
+		if ( ! current_user_can( 'add_post' ) ) {
+			echo '{ "content" : "You don\'t have permission to do that"}';
+			die();
+		}
 		$reply = $this->start_block( array( 'bulk-entry-notification' ) );
 		$reply .= $this->start_left_block();
 		$reply .= "&nbsp;";
