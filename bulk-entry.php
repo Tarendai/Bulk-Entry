@@ -233,6 +233,10 @@ class BulkEntry {
 		$stati = get_post_stati( array( 'show_in_admin_status_list' => true ), 'objects' );
 		$toolbar .= '<select id="bulk-entry-add-post-status" name="bulk-entry-add-post-status" class="">';
 		foreach ( $stati as $status ) {
+			// don't show the scheduled status yet
+			if( $status->name == 'future' ){
+				continue;
+			}
 			$toolbar .= '<option value="'.$status->name.'">'.$status->label.'</option>';
 		}
 		$toolbar .= '</select>';
