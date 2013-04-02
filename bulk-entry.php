@@ -179,10 +179,6 @@ class BulkEntry {
 		echo $this->toolbar();
 		echo '<div class="bulk-entry-block"><hr></div>';
 		$canvas = '<div id="bulk-entry-canvas" class="bulk-entry-canvas">';
-		/*$canvas .= $this->card();
-		$canvas .= $this->card();
-		$canvas .= $this->card();
-		*/
 		$canvas .= '</div>';
 		echo $canvas;
 		echo '</div>';
