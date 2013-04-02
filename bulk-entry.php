@@ -100,16 +100,11 @@ class BulkEntry {
 
 		$valid = check_ajax_referer( $editor_id, 'bulk_entry_post_nonce', false );
 		if ( !$valid ) {
-			echo '{ "content" : '.json_encode( $this->message_card( 'Security Problem', "Invalid nonce sent, if you've had this page open a while, try refreshing." ) ) . ' }';
+			$message = "Invalid nonce sent, if you've had this page open a while, try refreshing.";
+			$message_card = $this->message_card( 'Security Problem', $message );
+			echo '{ "content" : '.json_encode( $message_card ) . ' }';
 			die();
 		}
-
-		$reply = $this->start_block( array( 'bulk-entry-notification' ) );
-		$reply .= $this->start_left_block();
-		$reply .= '&nbsp;';
-		$reply .= $this->end_left_block();
-		$reply .= $this->start_right_block();
-		$reply .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
 
 		$type = $_POST['bulk_entry_posttype'];
 		$status = $_POST['bulk_entry_poststatus'];
@@ -118,8 +113,11 @@ class BulkEntry {
 
 		$posttype = get_post_type_object( $type );
 
+
+		$reply = '';
+
 		if ( $posttype == null ) {
-			$reply .= 'No such post type exists';
+			$reply .= $this->message_card( '&nbsp;', 'No such post type exists' );
 		} else {
 			if ( ! current_user_can( $posttype->cap->publish_posts ) ) {
 				$reply .= 'You don\'t have permission to do that';
@@ -136,12 +134,10 @@ class BulkEntry {
 				$post_id = wp_insert_post( $my_post );
 				$permalink = get_permalink( $post_id );
 				$editlink = get_edit_post_link( $post_id );
-				$reply .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> "'.$title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a></p>';
+				$message = $title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a>';
+				$reply .= $this->message_card( '&nbsp;', $message );
 			}
 		}
-		$reply .= '</div>';
-		$reply .= $this->end_right_block();
-		$reply .= $this->end_block();
 		echo '{ "content" : '.json_encode( $reply ).' }';
 		die();
 	}
@@ -155,28 +151,24 @@ class BulkEntry {
 		}
 
 		ob_start();
-		for ( $i = 0; $i < absint( $_POST['bulk_entry_postcount'] ); $i++ ) {
-			echo $this->card();
+		{
+			for ( $i = 0; $i < absint( $_POST['bulk_entry_postcount'] ); $i++ ) {
+				echo $this->card();
+			}
+			ob_start();
+			{
+				_WP_Editors::editor_js();
+			}
+			ob_end_clean();
+			$content = ob_get_contents();
 		}
-		ob_start();
-		_WP_Editors::editor_js();
 		ob_end_clean();
-		$content = ob_get_contents();
-		ob_end_clean();
-
-		$mceInit = $qtInit = '';
 
 		$ids = array();
-
 		foreach ( $this->mcesettings as $editor_id => $init ) {
 			$ids[] = $editor_id;
-			$qtInit .= '"'.$editor_id.'":{"id":"'.$editor_id.'","buttons":"strong,em,link,block,del,ins,img,ul,ol,li,code,more,spell,close"},';
 		}
-		$qtInit = '{' . trim( $qtInit, ',' ) . '}';
-
-		$data = array( 'content' => $content, 'qtInit' => $qtInit, 'mtInit' => $mceInit );
-
-		$data = '{ "content": '.json_encode( $content ).',"qtInit": '.$qtInit.', "editor_ids" : '.json_encode( $ids ).' }';
+		$data = '{ "content": '.json_encode( $content ).', "editor_ids" : '.json_encode( $ids ).' }';
 		echo $data;
 		die();
 
@@ -190,7 +182,6 @@ class BulkEntry {
 		wp_editor( 'preload', $this->get_editor_id(), array( 'teeny' => true ) );
 		echo '</div>';
 		echo $this->toolbar();
-		echo '<div class="bulk-entry-block"><hr></div>';
 		$canvas = '<div id="bulk-entry-canvas" class="bulk-entry-canvas">';
 		$canvas .= '</div>';
 		echo $canvas;
