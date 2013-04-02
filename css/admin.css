@@ -74,6 +74,7 @@
 	display: none;
 }
 
+.bulk-entry-message .bulk-entry-card-delete,
 .bulk-entry-notification .bulk-entry-card-delete {
 	border: none;
 	float: right;
