@@ -217,6 +217,7 @@ class BulkEntry {
 
 	function toolbar() {
 		$toolbar = $this->start_block();
+		$toolbar .= '<form method="post" action="">';
 		$toolbar .= $this->start_left_block();
 		$toolbar .= "I'd like a ";
 		$toolbar .= $this->end_left_block();
@@ -264,6 +265,7 @@ class BulkEntry {
 		$toolbar .= '</td></tr></table>';
 		$toolbar .= '</div>';
 		$toolbar .= $this->end_right_block();
+		$toolbar .= '</form>';
 		$toolbar .= $this->end_block();
 		return $toolbar;
 	}
@@ -271,7 +273,7 @@ class BulkEntry {
 	function card() {
 
 		$card = $this->start_block();
-		$card .= '<form method="post">';
+		$card .= '<form method="post" action="">';
 		$card .= $this->start_left_block();
 		$poststatus = $_POST['bulk_entry_poststatus'];
 		$posttype = $_POST['bulk_entry_posttype'];
