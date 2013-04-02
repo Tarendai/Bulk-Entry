@@ -239,48 +239,64 @@ class BulkEntry {
 		$toolbar = $this->start_block();
 		$toolbar .= '<form method="post" action="">';
 		$toolbar .= $this->start_left_block();
-		$toolbar .= "I'd like a ";
+		$label = "I'd like a ";
+		$label = apply_filters( 'bulk_entry_toolbar_label', $label );
+		$toolbar .= $label;
 		$toolbar .= $this->end_left_block();
 		$toolbar .= $this->start_right_block();
 		$toolbar .= '<div id="bulk-entry-toolbar" class="bulk-entry-toolbar">';
 		$toolbar .= '<table class="widefat mceToolbar mceToolbarRow1 Enabled"><tr><td>';
 
-		$toolbar .= '<div class="bulk-entry-toolbar-field">';
-		$toolbar .= '<input type="hidden" id="bulk-entry-add-post-count" name="bulk-entry-add-post-count" class="bulk-entry-toolbar-field--number" value="1"/>';
-		$toolbar .= '</div>';
+		$fields = array();
 
-		$toolbar .= '<div class="bulk-entry-toolbar-field">';
+		$field = '<div class="bulk-entry-toolbar-field">';
+		$field .= '<input type="hidden" id="bulk-entry-add-post-count" name="bulk-entry-add-post-count" class="bulk-entry-toolbar-field--number" value="1"/>';
+		$field .= '</div>';
+		$fields[] =$field;
+
+		$field = '<div class="bulk-entry-toolbar-field">';
 
 		$stati = get_post_stati( array( 'show_in_admin_status_list' => true ), 'objects' );
-		$toolbar .= '<select id="bulk-entry-add-post-status" name="bulk-entry-add-post-status" class="">';
+		$field .= '<select id="bulk-entry-add-post-status" name="bulk-entry-add-post-status" class="">';
 		foreach ( $stati as $status ) {
 			// don't show the scheduled status yet
 			if ( $status->name == 'future' ){
 				continue;
 			}
-			$toolbar .= '<option value="'.$status->name.'">'.$status->label.'</option>';
+			$field .= '<option value="'.$status->name.'">'.$status->label.'</option>';
 		}
-		$toolbar .= '</select>';
-		$toolbar .= '</div>';
+		$field .= '</select>';
+		$field .= '</div>';
+		$fields[] =$field;
 
 		$args = array(
 			'show_ui' => true
 		);
 		$post_types = get_post_types( $args, 'objects' );
 
-		$toolbar .= '<div class="bulk-entry-toolbar-field">';
-		$toolbar .= '<select id="bulk-entry-add-post-type" name="bulk-entry-add-post-type" class="">';
+		$field = '<div class="bulk-entry-toolbar-field">';
+		$field .= '<select id="bulk-entry-add-post-type" name="bulk-entry-add-post-type" class="">';
 		foreach ( $post_types as $post_type ) {
 			if ( post_type_supports( $post_type->name, 'editor' ) && post_type_supports( $post_type->name, 'title' ) ) {
-				$toolbar .= '<option value="'.$post_type->name.'">'.$post_type->labels->singular_name.'</option>';
+				$field .= '<option value="'.$post_type->name.'">'.$post_type->labels->singular_name.'</option>';
 			}
 		}
-		$toolbar .= '</select>';
-		$toolbar .= '</div>';
+		$field .= '</select>';
+		$field .= '</div>';
+		$fields[] =$field;
 
-		$toolbar .= '<div class="bulk-entry-toolbar-field">';
-		$toolbar .= '<input id="bulk-entry-toolbar-add-posts" type="button" name="bulk-entry-add-cards-button" class="button button-primary" value="Go"/>';
-		$toolbar .= '</div>';
+		$fields = apply_filters( 'bulk_entry_toolbar_fields', $fields );
+		$fields = implode( ' ', $fields );
+		$toolbar .= $fields;
+
+		$button = '<div class="bulk-entry-toolbar-field">';
+		$button .= '<input id="bulk-entry-toolbar-add-posts" type="button" name="bulk-entry-add-cards-button" class="button button-primary" value="Go"/>';
+		$button .= '</div>';
+		$buttons[] = $button;
+
+		$buttons = apply_filters( 'bulk_entry_toolbar_buttons', $buttons );
+		$buttons = implode( ' ', $buttons );
+		$toolbar .= $buttons;
 
 		$toolbar .= '</td></tr></table>';
 		$toolbar .= '</div>';
