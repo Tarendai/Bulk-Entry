@@ -99,7 +99,7 @@ class BulkEntry {
 
 		$reply = $this->start_block( array( 'bulk-entry-notification' ) );
 		$reply .= $this->start_left_block();
-		$reply .= "&nbsp;";
+		$reply .= '&nbsp;';
 		$reply .= $this->end_left_block();
 		$reply .= $this->start_right_block();
 		$reply .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
@@ -235,7 +235,7 @@ class BulkEntry {
 		$toolbar .= '<select id="bulk-entry-add-post-status" name="bulk-entry-add-post-status" class="">';
 		foreach ( $stati as $status ) {
 			// don't show the scheduled status yet
-			if( $status->name == 'future' ){
+			if ( $status->name == 'future' ){
 				continue;
 			}
 			$toolbar .= '<option value="'.$status->name.'">'.$status->label.'</option>';
