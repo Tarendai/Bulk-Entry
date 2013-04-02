@@ -111,24 +111,27 @@ class BulkEntry {
 
 		$posttype = get_post_type_object( $type );
 
-		if ( ! current_user_can( $posttype->cap->publish_posts ) ) {
-			echo '{ "content" : "You don\'t have permission to do that"}';
-			die();
+		if ( $posttype == null ) {
+			$reply .= 'No such post type exists';
+		} else {
+			if ( ! current_user_can( $posttype->cap->publish_posts ) ) {
+				$reply .= 'You don\'t have permission to do that';
+			} else {
+				// Create post object
+				$my_post = array(
+					'post_title'    => $title,
+					'post_content'  => $content,
+					'post_status'   => $status,
+					'post_type'		=> $type
+				);
+
+				// Insert the post into the database
+				$post_id = wp_insert_post( $my_post );
+				$permalink = get_permalink( $post_id );
+				$editlink = get_edit_post_link( $post_id );
+				$reply .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> "'.$title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a></p>';
+			}
 		}
-
-		// Create post object
-		$my_post = array(
-			'post_title'    => $title,
-			'post_content'  => $content,
-			'post_status'   => $status,
-			'post_type'		=> $type
-		);
-
-		// Insert the post into the database
-		$id = wp_insert_post( $my_post );
-		$permalink = get_permalink( $id );
-		$editlink = get_edit_post_link( $id );
-		$reply .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> "'.$title.'" created, <a href="'.$editlink.'">open in full editor</a> or <a href="'.$permalink.'">click here to view </a></p>';
 		$reply .= '</div>';
 		$reply .= $this->end_right_block();
 		$reply .= $this->end_block();
