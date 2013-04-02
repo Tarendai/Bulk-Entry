@@ -96,6 +96,13 @@ class BulkEntry {
 	}
 
 	function wp_ajax_bulk_entry_submit_post() {
+		$editor_id = $_POST['bulk_entry_editor_id'];
+
+		$valid = check_ajax_referer( $editor_id, 'bulk_entry_post_nonce', false );
+		if ( !$valid ) {
+			echo '{ "content" : '.json_encode( $this->message_card( 'Security Problem', "Invalid nonce sent, if you've had this page open a while, try refreshing." ) ) . ' }';
+			die();
+		}
 
 		$reply = $this->start_block( array( 'bulk-entry-notification' ) );
 		$reply .= $this->start_left_block();
@@ -140,6 +147,12 @@ class BulkEntry {
 	}
 
 	function wp_ajax_bulk_entry_new_card() {
+
+		$valid = check_ajax_referer( 'bulkentry-toolbar', 'bulkentry_toolbar_nonce', false );
+		if ( !$valid ) {
+			echo '{ "content" : '.json_encode( $this->message_card( 'Security Problem', "Invalid nonce sent, if you've had this page open a while, try refreshing." ) ) . ' }';
+			die();
+		}
 
 		ob_start();
 		for ( $i = 0; $i < absint( $_POST['bulk_entry_postcount'] ); $i++ ) {
@@ -281,6 +294,8 @@ class BulkEntry {
 		$toolbar .= '</td></tr></table>';
 		$toolbar .= '</div>';
 		$toolbar .= $this->end_right_block();
+		$ajax_nonce = wp_create_nonce( 'bulkentry-toolbar' );
+		$toolbar .= '<input id="bulk-entry-toolbar-nonce" type="hidden" name="bulk_entry_editor_nonce" value="'.$ajax_nonce.'" />';
 		$toolbar .= '</form>';
 		$toolbar .= $this->end_block();
 		return $toolbar;

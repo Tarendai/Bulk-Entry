@@ -4,6 +4,7 @@ jQuery(document).ready(function() {
 		var type = jQuery( '#bulk-entry-add-post-type' ).val();
 		var count = jQuery( '#bulk-entry-add-post-count' ).val();
 		var status = jQuery( '#bulk-entry-add-post-status' ).val();
+		var nonce = jQuery( '#bulk-entry-toolbar-nonce' ).val();
 
 		jQuery.ajax({
 			url: ajaxurl,
@@ -12,7 +13,8 @@ jQuery(document).ready(function() {
 				action: 'bulk_entry_new_card',
 				bulk_entry_posttype: type,
 				bulk_entry_postcount: count,
-				bulk_entry_poststatus: status
+				bulk_entry_poststatus: status,
+				bulkentry_toolbar_nonce: nonce
 			},
 			success: function( data ){
 				data = jQuery.parseJSON( data );
@@ -53,9 +55,12 @@ jQuery(document).ready(function() {
 		// submit AJAX request for stuff
 		var formobj = jQuery(this);
 		var type = formobj.find( 'input[name="bulk_entry_posttype"]').val();
+		var editor_id = formobj.find( 'input[name="bulk_entry_editor_id"]').val();
 		var status = formobj.find( 'input[name="bulk_entry_poststatus"]').val();
+		var nonce = formobj.find( 'input[name="bulk_entry_editor_nonce"]').val();
 		var content = formobj.find( '.wp-editor-area:first-child').val();
 		var title = formobj.find(".bulk-entry-card--title:first-child").val();
+
 		jQuery.ajax({
 			url: ajaxurl,
 			type: "post",
@@ -64,7 +69,9 @@ jQuery(document).ready(function() {
 				bulk_entry_posttype: type,
 				bulk_entry_poststatus: status,
 				bulk_entry_postcontent: content,
-				bulk_entry_posttitle: title
+				bulk_entry_posttitle: title,
+				bulk_entry_post_nonce: nonce,
+				bulk_entry_editor_id: editor_id
 			},
 			success: function( data ){
 				data = jQuery.parseJSON( data );
