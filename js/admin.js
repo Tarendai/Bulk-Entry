@@ -106,32 +106,24 @@ jQuery(document).ready(function() {
 
 
 function tinyMCE_bulk_entry_init( response ) {
-	var init, ed, qt, first_init, DOM, el, i;
+	var i;
 
 	if ( typeof(tinymce) == 'object' ) {
 
-		var editor;
-		for ( e in tinyMCEPreInit.mceInit ) {
-			editor = e;
-			break;
-		}
 		for ( i in response.editor_ids ) {
 			var ed_id = response.editor_ids[i];
-			tinyMCEPreInit.mceInit[ed_id] = tinyMCEPreInit.mceInit[editor];
-			tinyMCEPreInit.mceInit[ed_id]['elements'] = ed_id;
 			tinyMCEPreInit.mceInit[ed_id]['body_class'] = ed_id;
-			tinyMCEPreInit.mceInit[ed_id]['succesful'] =  false;
-		}
 
-		for ( ed in tinyMCEPreInit.mceInit ) {
-			// check if there is an adjacent span with the class mceEditor
 			if ( ! jQuery('#'+ed).next().hasClass('mceEditor') ) {
-				init = tinyMCEPreInit.mceInit[ed];
 				try {
-					tinymce.init(init);
-				} catch(e){
 					console.log('fail');
-				}
+			mcinit['elements'] = ed_id;
+			mcinit['body_class'] = ed_id;
+			mcinit['succesful'] =  false;
+			try {
+				tinymce.init(mcinit);
+			} catch(e){
+				console.log('failed to initialise TinyMCE instance');
 			}
 		}
 
