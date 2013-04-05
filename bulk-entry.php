@@ -237,6 +237,7 @@ class BulkEntry {
 		$card .= $this->start_right_block();
 		$card .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
 		$card .= '<p><a href="#" class="bulk-entry-card-delete" >x</a> ';
+		$message = apply_filters( 'bulk_entry_message_message', $message );
 		$card .= $message;
 		$card .= '</p>';
 		$card .= '</div>';
@@ -262,7 +263,7 @@ class BulkEntry {
 		$field = '<div class="bulk-entry-toolbar-field">';
 		$field .= '<input type="hidden" id="bulk-entry-add-post-count" name="bulk-entry-add-post-count" class="bulk-entry-toolbar-field--number" value="1"/>';
 		$field .= '</div>';
-		$fields[] =$field;
+		$fields[] = $field;
 
 		$field = '<div class="bulk-entry-toolbar-field">';
 
@@ -277,7 +278,7 @@ class BulkEntry {
 		}
 		$field .= '</select>';
 		$field .= '</div>';
-		$fields[] =$field;
+		$fields[] = $field;
 
 		$args = array(
 			'show_ui' => true
@@ -293,7 +294,7 @@ class BulkEntry {
 		}
 		$field .= '</select>';
 		$field .= '</div>';
-		$fields[] =$field;
+		$fields[] = $field;
 
 		$fields = apply_filters( 'bulk_entry_toolbar_fields', $fields );
 		$fields = implode( ' ', $fields );
