@@ -332,28 +332,46 @@ class BulkEntry {
 		$status = $status[$poststatus];
 
 		$card .= $status->label.' ';
-		//
 		$card .= $type->labels->singular_name;
 		$card .= $this->end_left_block();
+
 		$card .= $this->start_right_block();
 		$card .= '<div class="bulk-entry-block--content bulk-entry-card--content">';
-		$card .= '<div class="bulk-entry-card-field"><input type="text" name="bulk-entry-card--title" class="widefat bulk-entry-card--title" value="Title"/></div>';
+
+		$fields = array();
+
+		$fields[] = '<div class="bulk-entry-card-field"><input type="text" name="bulk-entry-card--title" class="widefat bulk-entry-card--title" value="Title"/></div>';
+
 		$editor_id = $this->get_editor_id();
 		ob_start();
 		wp_editor( 'content', $editor_id, array( 'textarea_rows' => 10, 'media_buttons' => false, 'teeny' => true ) );
 		$editor = ob_get_contents();
 		ob_end_clean();
-		$card .= '<div class="bulk-entry-card-field">'.$editor.'</div>';
+		$fields[] = '<div class="bulk-entry-card-field">'.$editor.'</div>';
+
+
+		$fields = apply_filters( 'bulk_entry_content_card_fields', $fields );
+		$fields = implode( '', $fields );
+		$card .= $fields;
+
 		$card .= '<div class="bulk-entry-card--buttons">';
 		$card .= '<a href="#" class="bulk-entry-card-control bulk-entry-card-delete" >Discard</a> <input type="submit" class="bulk-entry-card-control button button-primary" value="Save"/>';
 		$card .= '</div>';
 		$card .= '</div>';
 		$card .= $this->end_right_block();
+
+		$hidden_fields = array();
+
 		$ajax_nonce = wp_create_nonce( $editor_id );
-		$card .= '<input type="hidden" name="bulk_entry_editor_nonce" value="'.$ajax_nonce.'" />';
-		$card .= '<input type="hidden" name="bulk_entry_editor_id" value="'.$editor_id.'" />';
-		$card .= '<input type="hidden" name="bulk_entry_poststatus" value="'.$poststatus.'" />';
-		$card .= '<input type="hidden" name="bulk_entry_posttype" value="'.$posttype.'" />';
+		$hidden_fields[] = '<input type="hidden" name="bulk_entry_editor_nonce" value="'.$ajax_nonce.'" />';
+		$hidden_fields[] = '<input type="hidden" name="bulk_entry_editor_id" value="'.$editor_id.'" />';
+		$hidden_fields[] = '<input type="hidden" name="bulk_entry_poststatus" value="'.$poststatus.'" />';
+		$hidden_fields[] = '<input type="hidden" name="bulk_entry_posttype" value="'.$posttype.'" />';
+
+		$hidden_fields = apply_filters( 'bulk_entry_content_card_hidden_fields', $hidden_fields );
+		$hidden_fields = implode( '', $hidden_fields );
+
+		$card .= $hidden_fields;
 		//$card .= '<input type="hidden" name="bulk_entry_" value="'.$_POST[''].'" />';
 		$card .= '</form>';
 		$card .= $this->end_block();
