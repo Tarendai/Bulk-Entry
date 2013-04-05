@@ -190,38 +190,48 @@ class BulkEntry {
 
 	function start_block( $custom_classes = array() ) {
 		$custom_classes[] = 'bulk-entry-block';
+		$custom_classes = apply_filters( 'bulk_entry_start_block_classes', $custom_classes );
 		$classes = implode( ' ', $custom_classes );
 		$block = '<div class="'.$classes.'">';
+		$block = apply_filters( 'bulk_entry_start_block_html', $block );
 		return $block;
 	}
 
 	function start_left_block(){
 		$block = '<div class="bulk-entry-block--left"><div class="bulk-entry-block--label">';
+		$block = apply_filters( 'bulk_entry_start_left_block_html', $block );
 		return $block;
 	}
 	function start_right_block(){
-		$block = '<div class="bulk-entry-block--right">';;
+		$block = '<div class="bulk-entry-block--right">';
+		$block = apply_filters( 'bulk_entry_start_right_block_html', $block );
 		return $block;
 	}
 
 	function end_block() {
 		$block = '</div>';
+		$block = apply_filters( 'bulk_entry_end_block_html', $block );
 		return $block;
 	}
 
 	function end_left_block() {
 		$block = '</div></div>';
+		$block = apply_filters( 'bulk_entry_end_left_block_html', $block );
 		return $block;
 	}
 	function end_right_block() {
 		$block = '</div>';
+		$block = apply_filters( 'bulk_entry_end_right_block_html', $block );
 		return $block;
 	}
 
 	function message_card( $label, $message ) {
-		$card = $this->start_block( array( 'bulk-entry-message' ) );
+		$classes = array( 'bulk-entry-message' );
+		$classes = apply_filters( 'bulk_entry_message_card_classes', $classes );
+		$card = $this->start_block( $classes );
 		$card .= '<form method="post" action="">';
 		$card .= $this->start_left_block();
+		$label = apply_filters( 'bulk_entry_message_label', $label );
 		$card .= $label;
 		$card .= $this->end_left_block();
 		$card .= $this->start_right_block();
