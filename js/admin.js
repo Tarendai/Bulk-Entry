@@ -100,6 +100,7 @@ jQuery(document).ready(function() {
 				var card = jQuery('<div class="bulk-entry-message bulk-entry-block"><form method="post" action=""><div class="bulk-entry-block--left"><div class="bulk-entry-block--label">&nbsp;</div></div><div class="bulk-entry-block--right"><div class="bulk-entry-block--content bulk-entry-card--content"><p><a href="#" class="bulk-entry-card-delete">x</a> Server returned an error, try again shortly</p></div></div></form></div>');
 				card.css( 'opacity', '0' ).css( 'margin-top', "-" + height + "px" );
 				jQuery( '#bulk-entry-canvas' ).prepend( card );
+				card.animate({
 					opacity: 1,
 					"margin-top": "0"
 				}, 200, function() {
