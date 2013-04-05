@@ -6,6 +6,20 @@ jQuery(document).ready(function() {
 		var status = jQuery( '#bulk-entry-add-post-status' ).val();
 		var nonce = jQuery( '#bulk-entry-toolbar-nonce' ).val();
 
+
+		var loading = jQuery('<div class="bulk-entry--loading bulk-entry-block"><div class="bulk-entry-block--left"><div class="bulk-entry-block--label">&nbsp;</div></div><div class="bulk-entry-block--right">loading...</div></div>');
+
+
+		var loadingheight = loading.height();
+		loadingheight = Math.max(loadingheight,30);
+		loading.css('opacity','0');
+		jQuery( '#bulk-entry-canvas' ).prepend( loading );
+		loading.animate({
+			opacity: 1
+		}, 200, function() {
+			//
+		});
+
 		jQuery.ajax({
 			url: ajaxurl,
 			type: "post",
@@ -30,9 +44,29 @@ jQuery(document).ready(function() {
 				}, 200, function() {
 					//
 				});
+				loading.css( 'position', 'relative' ).animate({
+					opacity: 0,
+					height:0
+				}, 200, function() {
+					loading.remove();
+				});
 			},
 			error: function(){
-				alert("fail :-(");
+				var card = jQuery('<div class="bulk-entry-message bulk-entry-block"><form method="post" action=""><div class="bulk-entry-block--left"><div class="bulk-entry-block--label">&nbsp;</div></div><div class="bulk-entry-block--right"><div class="bulk-entry-block--content bulk-entry-card--content"><p><a href="#" class="bulk-entry-card-delete">x</a> Server returned an error, try again shortly</p></div></div></form></div>');
+				card.css( 'opacity', '0' ).css( 'margin-top', "-" + height + "px" );
+				jQuery( '#bulk-entry-canvas' ).prepend( card );
+				card.animate({
+					opacity: 1,
+					"margin-top": "0"
+				}, 200, function() {
+					//
+				});
+				loading.css( 'position', 'relative' ).animate({
+					opacity: 0,
+					height: 0
+				}, 200, function() {
+					loading.remove();
+				});
 			}
 		});
 	});
