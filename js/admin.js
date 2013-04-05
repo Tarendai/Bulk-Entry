@@ -109,14 +109,10 @@ function tinyMCE_bulk_entry_init( response ) {
 	var i;
 
 	if ( typeof(tinymce) == 'object' ) {
-
+		var init = tinyMCEPreInit.mceInit[Object.keys(tinyMCEPreInit.mceInit)[0]];
 		for ( i in response.editor_ids ) {
 			var ed_id = response.editor_ids[i];
-			tinyMCEPreInit.mceInit[ed_id]['body_class'] = ed_id;
-
-			if ( ! jQuery('#'+ed).next().hasClass('mceEditor') ) {
-				try {
-					console.log('fail');
+			var mcinit = init;
 			mcinit['elements'] = ed_id;
 			mcinit['body_class'] = ed_id;
 			mcinit['succesful'] =  false;
