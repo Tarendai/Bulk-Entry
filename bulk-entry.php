@@ -3,7 +3,7 @@
 Plugin Name: Bulk Entry
 Plugin URI: http://interconnectit.com
 Description: A tool for the bulk entry of posts, pages, etc
-Version: 1.0
+Version: 1.1
 Author: Tom J Nowell
 Author Email: contact@tomjn.com
 License:
@@ -331,8 +331,11 @@ class BulkEntry {
 		$status = get_post_stati( array( 'name' => $poststatus ), 'objects' );
 		$status = $status[$poststatus];
 
-		$card .= $status->label.' ';
-		$card .= $type->labels->singular_name;
+		$label = $status->label.' ';
+		$label .= $type->labels->singular_name;
+		$label = apply_filters( 'bulk_entry_content_card_label', $label );
+
+		$card .= $label;
 		$card .= $this->end_left_block();
 
 		$card .= $this->start_right_block();
