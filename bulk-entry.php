@@ -24,7 +24,26 @@ License:
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+add_action(
+	'init',
+	array( BulkEntry::get_instance(), 'init_bulk_entry' )
+);
+
+/**
+ * Implements an Interface, logic and AJAX callbacks for a bulk post entry tool.
+ * This class is intended to be a singleton
+ *
+ * @author:TJNowell
+ */
 class BulkEntry {
+
+
+	/**
+	 * Main instance of this plugin
+	 *
+	 * @var object
+	 */
+	public static $bulkentry = null;
 
 	/*--------------------------------------------*
 	 * Constants
@@ -34,68 +53,51 @@ class BulkEntry {
 
 	public $last_editor_id = 0;
 
-
-	public $mcesettings = array();
+	public static function get_instance() {
+		if ( self::$bulkentry == null ) {
+			self::$bulkentry = new BulkEntry();
+		}
+		return self::$bulkentry;
+	}
 
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		//Hook up to the init action
-		add_action( 'init', array( &$this, 'init_bulk_entry' ) );
 		add_action( 'wp_ajax_bulk_entry_new_card', array( &$this, 'wp_ajax_bulk_entry_new_card' ) );
 		add_action( 'wp_ajax_bulk_entry_submit_post', array( &$this, 'wp_ajax_bulk_entry_submit_post' ) );
 		add_action( 'after_wp_tiny_mce', array( $this, 'steal_away_mcesettings' ) );
 	}
 
 	/**
-	 * Runs when the plugin is activated
-	 */
-	function install_bulk_entry() {
-		// do not generate any output here
-	}
-
-	/**
 	 * Runs when the plugin is initialized
 	 */
-	function init_bulk_entry() {
+	public function init_bulk_entry() {
 		// Setup localization
 		load_plugin_textdomain( self::SLUG, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 		// Load JavaScript and stylesheets
 		$this->register_scripts_and_styles();
 
-
-		if ( is_admin() ) {
-			//this will run when in the WordPress admin
-		} else {
-			//this will run when on the frontend
-		}
-
-		/*
-		 * TODO: Define custom functionality for your plugin here
-		 *
-		 * For more information:
-		 * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		 */
 		add_action( 'admin_menu', array( $this, 'action_callback_admin_menu' ) );
 
 	}
 
-	function action_callback_admin_menu() {
+	public function action_callback_admin_menu() {
 		// TODO define your action method here
 		add_management_page( 'Bulk Entry', 'Bulk Entry', 'edit_posts', self::SLUG, array( $this, 'admin_menu_page' ) );
 	}
 
-	function steal_away_mcesettings( $mcesettings ) {
+	public function steal_away_mcesettings( $mcesettings ) {
 		$this->mcesettings = $mcesettings;
 	}
 
-	function get_editor_id() {
+	public function get_editor_id() {
 		$this->last_editor_id++;
 		return 'bulk-entry-editor'.time().$this->last_editor_id;
 	}
 
-	function wp_ajax_bulk_entry_submit_post() {
+	public function wp_ajax_bulk_entry_submit_post() {
 		$editor_id = $_POST['bulk_entry_editor_id'];
 
 		$valid = check_ajax_referer( $editor_id, 'bulk_entry_post_nonce', false );
@@ -142,7 +144,7 @@ class BulkEntry {
 		die();
 	}
 
-	function wp_ajax_bulk_entry_new_card() {
+	public function wp_ajax_bulk_entry_new_card() {
 
 		$valid = check_ajax_referer( 'bulkentry-toolbar', 'bulkentry_toolbar_nonce', false );
 		if ( !$valid ) {
@@ -175,7 +177,7 @@ class BulkEntry {
 	}
 
 
-	function admin_menu_page() {
+	public function admin_menu_page() {
 		echo '<div class="wrap bulk-entry--wrap">';
 		echo '<h2>Bulk Entry</h2>';
 		echo '<div style="display:none;">';
@@ -188,7 +190,7 @@ class BulkEntry {
 		echo '</div>';
 	}
 
-	function start_block( $custom_classes = array() ) {
+	public function start_block( $custom_classes = array() ) {
 		$custom_classes[] = 'bulk-entry-block';
 		$custom_classes = apply_filters( 'bulk_entry_start_block_classes', $custom_classes );
 		$classes = implode( ' ', $custom_classes );
@@ -197,35 +199,37 @@ class BulkEntry {
 		return $block;
 	}
 
-	function start_left_block(){
+	public function start_left_block(){
 		$block = '<div class="bulk-entry-block--left"><div class="bulk-entry-block--label">';
 		$block = apply_filters( 'bulk_entry_start_left_block_html', $block );
 		return $block;
 	}
-	function start_right_block(){
+
+	public function start_right_block(){
 		$block = '<div class="bulk-entry-block--right">';
 		$block = apply_filters( 'bulk_entry_start_right_block_html', $block );
 		return $block;
 	}
 
-	function end_block() {
+	public function end_block() {
 		$block = '</div>';
 		$block = apply_filters( 'bulk_entry_end_block_html', $block );
 		return $block;
 	}
 
-	function end_left_block() {
+	public function end_left_block() {
 		$block = '</div></div>';
 		$block = apply_filters( 'bulk_entry_end_left_block_html', $block );
 		return $block;
 	}
-	function end_right_block() {
+
+	public function end_right_block() {
 		$block = '</div>';
 		$block = apply_filters( 'bulk_entry_end_right_block_html', $block );
 		return $block;
 	}
 
-	function message_card( $label, $message ) {
+	public function message_card( $label, $message ) {
 		$classes = array( 'bulk-entry-message' );
 		$classes = apply_filters( 'bulk_entry_message_card_classes', $classes );
 		$card = $this->start_block( $classes );
@@ -246,7 +250,7 @@ class BulkEntry {
 		return $card;
 	}
 
-	function toolbar() {
+	public function toolbar() {
 		$toolbar = $this->start_block();
 		$toolbar .= '<form method="post" action="">';
 		$toolbar .= $this->start_left_block();
@@ -319,7 +323,7 @@ class BulkEntry {
 		return $toolbar;
 	}
 
-	function card() {
+	public function card() {
 
 		$card = $this->start_block();
 		$card .= '<form method="post" action="">';
@@ -416,4 +420,3 @@ class BulkEntry {
 
 	} // end load_file
 } // end class
-new BulkEntry();
