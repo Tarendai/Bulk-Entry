@@ -25,6 +25,7 @@ Create large numbers of posts on a single screen in bulk. Features include:
 == Screenshots ==
 
 1. The main screen
+2. Custom Post types
 
 == Installation ==
 
