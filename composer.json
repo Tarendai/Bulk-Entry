@@ -1,5 +1,10 @@
 {
   "name": "tomjn/bulkentry",
   "version": "1.1",
-  "license": "GPL-2.0+"
+  "license": "GPL-2.0+",
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0",
+    "php": ">=5.2.4"
+  }
 }
